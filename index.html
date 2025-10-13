@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parth Muley - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #111;
+            color: #fff;
+            overflow: hidden;
+            /* Prevent body scroll */
+        }
+
+        .font-anton {
+            font-family: 'Anton', sans-serif;
+        }
+
+        .main-bg {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23e02c2c' fill-opacity='0.1'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 1.4l2.83 2.83 1.41-1.41L1.41 0H0v1.41zM38.59 40l-2.83-2.83 1.41-1.41L40 38.59V40h-1.41zM40 1.4l-2.83 2.83-1.41-1.41L38.59 0H40v1.41zM20 18.6l2.83-2.83 1.41 1.41L21.41 20l2.83 2.83-1.41 1.41L20 21.41l-2.83 2.83-1.41-1.41L18.59 20l-2.83-2.83 1.41-1.41L20 18.59z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .nav-item {
+            /* Creates the angled shape */
+            clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: #e02c2c;
+            color: #000;
+            transform: translateX(10px);
+        }
+
+        .content-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a1a;
+            /* Start off-screen */
+            clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+            transition: clip-path 0.7s cubic-bezier(0.86, 0, 0.07, 1);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .content-panel.active {
+            /* Animate into view */
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .ai-btn {
+            border: 2px solid #e02c2c;
+        }
+
+        .ai-btn:hover {
+            background-color: #e02c2c;
+            color: #000;
+        }
+
+        .loader {
+            border: 4px solid #555;
+            border-top: 4px solid #e02c2c;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="main-bg">
+
+    <div class="flex h-screen">
+        <!-- Navigation -->
+        <nav class="w-1/4 max-w-xs bg-black p-8 flex flex-col justify-center space-y-2">
+            <button data-target="panel-about"
+                class="nav-item active font-anton text-2xl text-right p-3 pr-10 bg-gray-900">ABOUT</button>
+            <button data-target="panel-experience"
+                class="nav-item font-anton text-2xl text-right p-3 pr-10 bg-gray-900">EXPERIENCE</button>
+            <button data-target="panel-projects"
+                class="nav-item font-anton text-2xl text-right p-3 pr-10 bg-gray-900">PROJECTS</button>
+            <button data-target="panel-academics"
+                class="nav-item font-anton text-2xl text-right p-3 pr-10 bg-gray-900">ACADEMICS</button>
+            <button data-target="panel-skills"
+                class="nav-item font-anton text-2xl text-right p-3 pr-10 bg-gray-900">SKILLS</button>
+            <button data-target="panel-contact"
+                class="nav-item font-anton text-2xl text-right p-3 pr-10 bg-gray-900">CONTACT</button>
+        </nav>
+
+        <!-- Content Area -->
+        <main class="flex-grow relative overflow-hidden">
+            <!-- About Panel -->
+            <div id="panel-about" class="content-panel active p-8 md:p-12 overflow-y-auto">
+                <h2 class="font-anton text-6xl text-red-500">PARTH MULEY</h2>
+                <h3 class="text-xl text-gray-400">Software Engineer | AI & Backend Developer</h3>
+                <p class="mt-8 max-w-prose">
+                    I’m <strong>Parth Muley</strong> — a digital architect who builds intelligent systems that connect
+                    logic, data, and design. Currently pursuing my <strong>Master’s in Computer Science (Artificial
+                        Intelligence)</strong> at the <strong>University of Southern California</strong>, I explore how
+                    code can evolve beyond syntax to shape real-world impact.
+                </p>
+                <p class="mt-4 max-w-prose">
+                    My world revolves around <strong>AI, backend engineering, and system architecture</strong>. From
+                    deploying <strong>TinyML models on edge devices</strong> at <strong>Canspirit.AI</strong> to
+                    crafting <strong>real-time APIs and DevOps pipelines</strong> for security automation, I thrive at
+                    the intersection of performance and precision.
+                </p>
+                <p class="mt-4 max-w-prose">
+                    I speak fluently in <strong>Java (Spring Boot, Microservices)</strong> and <strong>Python (AI/ML
+                        frameworks)</strong>. My toolkit expands through <strong>Kafka, Docker, GitLab CI/CD, and
+                        MongoDB</strong> — all serving one mission: building systems that think, adapt, and endure.
+                </p>
+                <p class="mt-4 max-w-prose">
+                    Beyond the screen, I’m fascinated by the art of <strong>creating intelligent interactions</strong> —
+                    where technology feels alive and purposeful. Every project I take on is a step toward a world where
+                    digital systems don’t just function — they <em>collaborate</em>.
+                </p>
+                <p class="mt-4 italic text-gray-400">
+                    “Crafting intelligence through code — one system at a time.”
+                </p>
+            </div>
+
+            <!-- Experience Panel -->
+            <div id="panel-experience" class="content-panel p-8 md:p-12 overflow-y-auto">
+                <h2 class="font-anton text-6xl text-red-500">EXPERIENCE</h2>
+                <div class="mt-8 space-y-6">
+                    <div class="p-4 bg-gray-900 rounded-lg">
+                        <h3 class="font-anton text-2xl text-red-400">Associate Software Developer @ Amdocs</h3>
+                        <p class="text-sm text-gray-500">Nov 2024 – May 2025</p>
+                        <ul class="mt-2 list-disc list-inside">
+                            <li>Built a Python pipeline to merge and auto-classify 1,000+ GitLab vulnerabilities across
+                                40 repositories.</li>
+                            <li>Engineered exclusion rules that cut noisy alerts by 35% and reduced triage time from
+                                48-72h to &lt;4h.</li>
+                            <li>Standardized version extraction and upgrade-type tagging, accelerating remediation
+                                planning.</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-gray-900 rounded-lg">
+                        <h3 class="font-anton text-2xl text-red-400">AI/ML Intern @ Canspirit.AI</h3>
+                        <p class="text-sm text-gray-500">July 2023 – Jan 2024</p>
+                        <ul class="mt-2 list-disc list-inside">
+                            <li>Developed and deployed a TinyML language-classifier on Raspberry Pi with 94% accuracy.
+                            </li>
+                            <li>Built an OCR + Naive Bayes pipeline to detect and classify printed-label languages.</li>
+                            <li>Created a cross-platform Python scanner for cataloging network data assets.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Panel -->
+            <div id="panel-projects" class="content-panel p-8 md:p-12 overflow-y-auto">
+                <h2 class="font-anton text-6xl text-red-500">PROJECTS</h2>
+                <div id="projects-list" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Projects will be populated by JS -->
+                </div>
+                <div id="project-details" class="mt-8 hidden">
+                    <!-- This is a template for the AI section, which gets cloned into the details area -->
+                    <div id="ai-section-template" class="mt-6 border-t-2 border-red-500/50 pt-4">
+                        <h4 class="font-anton text-2xl text-red-400 mb-2">AI NAVIGATOR</h4>
+                        <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                            <button class="ai-btn flex-1 text-red-400 text-sm py-2 px-3"
+                                data-prompt="Analyze the mission parameters and provide a tactical summary for this project.">ANALYZE
+                                PARAMETERS</button>
+                            <button class="ai-btn flex-1 text-red-400 text-sm py-2 px-3"
+                                data-prompt="Briefly explain the role of each technology used in this project.">LIST
+                                TECH STACK</button>
+                        </div>
+                        <div class="ai-response-area mt-4 p-3 bg-black/30 rounded min-h-[60px] text-sm font-mono"></div>
+                        <div class="loader mx-auto mt-3 hidden"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Academics Panel -->
+            <div id="panel-academics" class="content-panel p-8 md:p-12 overflow-y-auto">
+                <h2 class="font-anton text-6xl text-red-500">ACADEMICS</h2>
+                <div class="mt-8 space-y-6">
+                    <div class="p-4 bg-gray-900">
+                        <h3 class="font-anton text-2xl text-red-400">M.S. in Computer Science (Artificial Intelligence)
+                        </h3>
+                        <p class="text-sm text-gray-500">University of Southern California | June 2025 – Dec 2026</p>
+                    </div>
+                    <div class="p-4 bg-gray-900">
+                        <h3 class="font-anton text-2xl text-red-400">B.Tech. in Electronics and Communication
+                            Engineering</h3>
+                        <p class="text-sm text-gray-500">MIT WPU, Pune | Nov 2020 – June 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Panel -->
+            <div id="panel-skills" class="content-panel p-8 md:p-12 overflow-y-auto">
+                <h2 class="font-anton text-6xl text-red-500">SKILLS</h2>
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                    <div>
+                        <h3 class="text-xl text-gray-300 font-bold">Languages</h3>
+                        <p>Python, Java, Go, JavaScript (Node.js), Bash</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl text-gray-300 font-bold">Web & APIs</h3>
+                        <p>REST API design, Flask, Express, Spring Boot, Swagger/OpenAPI, OpenAI</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl text-gray-300 font-bold">Machine Learning</h3>
+                        <p>scikit-learn, TinyML, OCR, Naive Bayes, LSTM, GRU, model evaluation</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl text-gray-300 font-bold">Infrastructure & Deployment</h3>
+                        <p>Docker, GitLab CI, Git, Raspberry Pi, CI/CD pipelines</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl text-gray-300 font-bold">Databases</h3>
+                        <p>MySQL, MongoDB, Redis, FAISS/Pinecone (basic), Chromadb</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl text-gray-300 font-bold">Practices & Tools</h3>
+                        <p>Unit Testing (pytest, JUnit), Automation, Postman, k6, Edge Impulse</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Panel -->
+            <div id="panel-contact" class="content-panel p-8 md:p-12 overflow-y-auto">
+                <h2 class="font-anton text-6xl text-red-500">CONTACT</h2>
+                <div class="mt-8 space-y-4 text-lg">
+                    <p>EMAIL: <a href="mailto:parthusc.2025@gmail.com"
+                            class="text-red-400 hover:underline">parthusc.2025@gmail.com</a></p>
+                    <p>LINKEDIN: <a href="https://www.linkedin.com/in/parth-muley-13872b146/" target="_blank"
+                            class="text-red-400 hover:underline">linkedin.com/in/parth-muley-13872b146/</a></p>
+                    <p>GITHUB: <a href="https://github.com/ParthMuley" target="_blank"
+                            class="text-red-400 hover:underline">github.com/ParthMuley</a></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- EDIT YOUR DATA HERE ---
+        // --- EDIT YOUR DATA HERE ---
+        const projectsData = {
+            monarch: {
+                name: 'Project Monarch',
+                type: 'Security Automation',
+                description: `
+        Project Monarch is an automation framework that streamlines GitLab Security Vulnerability Management.
+        It automatically fetches, merges, and processes vulnerability data — classifying upgrade types, filtering
+        deprecated or infeasible CVEs, and generating stakeholder-friendly reports. 
+        Highlights:
+        • Automated end-to-end pipeline for vulnerability triage.
+        • Intelligent exclusion logic for deprecated and out-of-scope files.
+        • CSV processor that classifies upgrade severities (major/minor/patch).
+        `
+            },
+            eventSharing: {
+                name: 'Local Event Sharing API',
+                type: 'Backend API',
+                description: `
+        A RESTful API designed to connect communities through local event sharing. 
+        It enables users to add, search, update, and delete events while keeping scalability
+        and clarity at the core. 
+        Highlights:
+        • Built modular REST endpoints with Node.js and Express.
+        • Integrated location-based search and filtering.
+        • MongoDB backend with Postman-tested endpoints.
+        `
+            },
+            aiAgents: {
+                name: 'AI Agents',
+                type: 'AI Systems',
+                description: `
+        A suite of experimental AI-driven agents that simulate reasoning, automate tasks,
+        and serve as domain-specific assistants. 
+        Highlights:
+        • Built with LangChain and OpenAI API for contextual task reasoning.
+        • Implemented memory persistence and prompt templates.
+        • Explored multi-agent collaboration patterns for intelligent task automation.
+        `
+            },
+            sweetSense: {
+                name: 'Sweet Sense',
+                type: 'ML Research Project',
+                description: `
+        A research initiative to develop a non-invasive, ML-powered glucose monitoring system.
+        The model maps sensor features to blood sugar levels, aiming for a prick-free alternative.
+        Highlights:
+        • Built and trained ML models using scikit-learn and Raspberry Pi sensor data.
+        • Conducted real-time signal analysis for glucose estimation.
+        • Guided by Prof. Parul Jadhav, USC.
+        `
+            }
+        };
+        // --- END OF CONTENT SECTION ---
+
+        const navItems = document.querySelectorAll('.nav-item');
+        const contentPanels = document.querySelectorAll('.content-panel');
+        const projectsList = document.getElementById('projects-list');
+        const projectDetails = document.getElementById('project-details');
+        const aiSectionTemplate = document.getElementById('ai-section-template');
+        aiSectionTemplate.remove(); // Remove the template from the DOM
+        let selectedProject = null;
+
+        // Populate Projects
+        Object.keys(projectsData).forEach(id => {
+            const project = projectsData[id];
+            const button = document.createElement('button');
+            button.className = "text-left p-4 bg-gray-900 hover:bg-gray-800 transition";
+            button.innerHTML = `<h3 class="font-anton text-2xl text-red-400">${project.name}</h3><p class="text-sm text-gray-500">${project.type}</p>`;
+            button.onclick = () => {
+                selectedProject = project;
+                document.querySelectorAll('#projects-list button').forEach(btn => btn.style.backgroundColor = '');
+                button.style.backgroundColor = '#e02c2c';
+
+                projectDetails.innerHTML = `<p class="mt-4 whitespace-pre-line">${project.description}</p>`;
+                const newAiSection = aiSectionTemplate.cloneNode(true);
+                projectDetails.appendChild(newAiSection);
+                projectDetails.classList.remove('hidden');
+
+                setupAiButtons(newAiSection);
+            };
+            projectsList.appendChild(button);
+        });
+
+        // Navigation Logic
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                const targetId = item.dataset.target;
+                contentPanels.forEach(panel => {
+                    panel.classList.toggle('active', panel.id === targetId);
+                });
+            });
+        });
+
+        function typeWriter(element, text, i = 0) {
+            if (!element) return;
+            if (i === 0) element.innerHTML = '';
+            if (i < text.length) {
+                element.innerHTML += text.charAt(i);
+                setTimeout(() => typeWriter(element, text, i + 1), 10);
+            }
+        }
+
+        function setupAiButtons(section) {
+            section.querySelectorAll('.ai-btn').forEach(aiButton => {
+                aiButton.addEventListener('click', async () => {
+                    if (!selectedProject) return;
+
+                    const loader = section.querySelector('.loader');
+                    const aiResponseArea = section.querySelector('.ai-response-area');
+
+                    const prompt = aiButton.dataset.prompt;
+                    loader.classList.remove('hidden');
+                    aiResponseArea.innerHTML = '';
+                    section.querySelectorAll('.ai-btn').forEach(b => b.disabled = true);
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                    const fullPrompt = `You are a Navigator AI from a stylish video game. Analyze the following mission log:
+                    - Mission: "${selectedProject.name}"
+                    - Type: "${selectedProject.type}"
+                    - Debrief: "${selectedProject.description}"
+                    - Tech Stack: "${selectedProject.tech}"
+                    Task: ${prompt}. Respond with confidence and a bit of flair, like a helpful AI companion.`;
+                    const payload = { contents: [{ parts: [{ text: fullPrompt }] }] };
+                    try {
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+                        const result = await response.json();
+                        const text = result.candidates?.[0]?.content?.parts?.[0]?.text || 'No intel available.';
+                        typeWriter(aiResponseArea, text);
+                    } catch (error) {
+                        console.error("Gemini API call failed:", error);
+                        aiResponseArea.innerText = "Connection to Navigator lost. Check console.";
+                    } finally {
+                        loader.classList.add('hidden');
+                        section.querySelectorAll('.ai-btn').forEach(b => b.disabled = false);
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>
