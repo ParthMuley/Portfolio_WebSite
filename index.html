@@ -478,12 +478,15 @@
                         }
                         if (!response.ok) {
                             let errorMessage = `API Error (${response.status})`;
-                            try {
-                                const errorPayload = await response.json();
-                                if (errorPayload?.error) errorMessage = errorPayload.error;
-                            } catch {
-                                const errorText = await response.text();
-                                if (errorText) errorMessage = errorText;
+                            const errorText = await response.text();
+                            if (errorText) {
+                                try {
+                                    const errorPayload = JSON.parse(errorText);
+                                    if (errorPayload?.error) errorMessage = errorPayload.error;
+                                    else errorMessage = errorText;
+                                } catch {
+                                    errorMessage = errorText;
+                                }
                             }
                             throw new Error(errorMessage);
                         }
