@@ -465,14 +465,14 @@
         const apiKeyInput = document.getElementById('api-key-input');
         const apiKeySubmit = document.getElementById('api-key-submit');
         const apiKeyCancel = document.getElementById('api-key-cancel');
-        let _apiKeyResolve = null;
+        let pendingApiKeyResolve = null;
 
         apiKeySubmit.addEventListener('click', () => {
             const key = apiKeyInput.value.trim();
             if (!key) return;
             sessionStorage.setItem('gemini_api_key', key);
             apiKeyModal.classList.remove('visible');
-            if (_apiKeyResolve) { _apiKeyResolve(key); _apiKeyResolve = null; }
+            if (pendingApiKeyResolve) { pendingApiKeyResolve(key); pendingApiKeyResolve = null; }
         });
 
         apiKeyInput.addEventListener('keydown', (e) => {
@@ -481,14 +481,14 @@
 
         apiKeyCancel.addEventListener('click', () => {
             apiKeyModal.classList.remove('visible');
-            if (_apiKeyResolve) { _apiKeyResolve(null); _apiKeyResolve = null; }
+            if (pendingApiKeyResolve) { pendingApiKeyResolve(null); pendingApiKeyResolve = null; }
         });
 
         function getGeminiApiKey() {
             const stored = sessionStorage.getItem('gemini_api_key');
             if (stored) return Promise.resolve(stored);
             return new Promise(resolve => {
-                _apiKeyResolve = resolve;
+                pendingApiKeyResolve = resolve;
                 apiKeyInput.value = '';
                 apiKeyModal.classList.add('visible');
                 apiKeyInput.focus();
@@ -508,11 +508,12 @@
                 }
                 if (readmeRes.ok) {
                     const readmeData = await readmeRes.json();
-                    const decoded = atob(readmeData.content.replace(/\n/g, ''));
+                    const decoded = atob(readmeData.content.trim());
                     context += `README (first 1200 chars): ${decoded.slice(0, 1200)}`;
                 }
                 return context;
-            } catch (_) {
+            } catch (err) {
+                console.warn('Could not fetch GitHub context:', err);
                 return '';
             }
         }
@@ -541,7 +542,7 @@
                         githubContext = await fetchGitHubContext(selectedProject.githubRepo);
                     }
 
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
                     const fullPrompt = `You are a Navigator AI from a stylish video game. Analyze the following mission log:
                     - Mission: "${selectedProject.name}"
                     - Type: "${selectedProject.type}"
@@ -553,13 +554,14 @@
                     try {
                         const response = await fetch(apiUrl, {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
                             body: JSON.stringify(payload)
                         });
                         if (response.status === 400 || response.status === 401 || response.status === 403) {
                             // Likely bad key — clear it so next click re-prompts
                             sessionStorage.removeItem('gemini_api_key');
-                            throw new Error(`API Auth Error: ${response.status}`);
+                            const aiError = await response.json().catch(() => ({}));
+                            throw new Error(aiError?.error?.message || `Auth error ${response.status}`);
                         }
                         if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
                         const result = await response.json();
@@ -567,7 +569,10 @@
                         typeWriter(aiResponseArea, text);
                     } catch (error) {
                         console.error("Gemini API call failed:", error);
-                        aiResponseArea.innerText = "Connection to Navigator lost. Check console for details.";
+                        const isAuthError = error.message && (error.message.includes('API_KEY') || error.message.includes('Auth error') || error.message.includes('INVALID'));
+                        aiResponseArea.innerText = isAuthError
+                            ? 'Invalid API key. Please re-enter your Gemini API key and try again.'
+                            : 'Connection to Navigator lost. Check console for details.';
                     } finally {
                         loader.classList.add('hidden');
                         section.querySelectorAll('.ai-btn').forEach(b => b.disabled = false);
