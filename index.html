@@ -69,6 +69,29 @@
             color: #000;
         }
 
+        /* API Key Modal */
+        #api-key-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #api-key-modal.visible {
+            display: flex;
+        }
+
+        #api-key-modal .modal-box {
+            background: #1a1a1a;
+            border: 2px solid #e02c2c;
+            padding: 2rem;
+            max-width: 440px;
+            width: 90%;
+        }
+
         .loader {
             border: 4px solid #555;
             border-top: 4px solid #e02c2c;
@@ -188,6 +211,9 @@
                             <button class="ai-btn flex-1 text-red-400 text-sm py-2 px-3"
                                 data-prompt="Briefly explain the role of each technology used in this project.">LIST
                                 TECH STACK</button>
+                            <button class="ai-btn flex-1 text-red-400 text-sm py-2 px-3"
+                                data-prompt="Suggest potential improvements, next features, or next steps that would make this project even more impressive.">SUGGEST
+                                IMPROVEMENTS</button>
                         </div>
                         <div class="ai-response-area mt-4 p-3 bg-black/30 rounded min-h-[60px] text-sm font-mono"></div>
                         <div class="loader mx-auto mt-3 hidden"></div>
@@ -258,6 +284,31 @@
         </main>
     </div>
 
+    <!-- API Key Modal -->
+    <div id="api-key-modal">
+        <div class="modal-box">
+            <h3 class="font-anton text-2xl text-red-400 mb-2">AI NAVIGATOR — AUTHENTICATION</h3>
+            <p class="text-sm text-gray-400 mb-4">
+                Enter your free Gemini API key to activate the AI Navigator.<br>
+                Your key is stored in this browser session only and never sent anywhere except Google's API.
+            </p>
+            <input id="api-key-input" type="password" placeholder="Paste your Gemini API key here"
+                class="w-full bg-black border border-gray-600 text-white text-sm p-2 rounded mb-3 focus:outline-none focus:border-red-500" />
+            <p class="text-xs text-gray-500 mb-4">
+                Don't have a key?
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-red-400 hover:underline">
+                    Get a free key at Google AI Studio →
+                </a>
+            </p>
+            <div class="flex space-x-2">
+                <button id="api-key-cancel"
+                    class="flex-1 border border-gray-600 text-gray-400 text-sm py-2 hover:bg-gray-800">CANCEL</button>
+                <button id="api-key-submit"
+                    class="flex-1 border-2 border-red-500 text-red-400 text-sm py-2 hover:bg-red-600 hover:text-black">AUTHENTICATE</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // --- EDIT YOUR DATA HERE ---
         // --- EDIT YOUR DATA HERE ---
@@ -265,6 +316,7 @@
             monarch: {
                 name: 'Project Monarch',
                 type: 'Security Automation',
+                githubRepo: 'ParthMuley/Project_Monarch',
                 description: `
         Project Monarch is an automation framework that streamlines GitLab Security Vulnerability Management.
         It automatically fetches, merges, and processes vulnerability data — classifying upgrade types, filtering
@@ -291,6 +343,7 @@
             aiAgents: {
                 name: 'AI Agents',
                 type: 'AI Systems',
+                githubRepo: 'ParthMuley/Ai_agents',
                 description: `
         A suite of experimental AI-driven agents that simulate reasoning, automate tasks,
         and serve as domain-specific assistants. 
@@ -310,6 +363,47 @@
         • Built and trained ML models using scikit-learn and Raspberry Pi sensor data.
         • Conducted real-time signal analysis for glucose estimation.
         • Guided by Prof. Parul Jadhav, USC.
+        `
+            },
+            pulse: {
+                name: 'Pulse',
+                type: 'AI Music Engine',
+                githubRepo: 'ParthMuley/Pulse',
+                description: `
+        Pulse is an AI-driven dynamic music engine for live streaming. It analyzes Twitch chat
+        and streamer commentary to compose custom instrumental soundtracks in real-time —
+        matching the mood and energy of the stream moment-by-moment.
+        Highlights:
+        • Real-time sentiment analysis of Twitch chat using NLP.
+        • Generative music composition pipeline that adapts to streamer context.
+        • Built with TypeScript; targets zero-latency audio response.
+        `
+            },
+            portfolioWebsite: {
+                name: 'Portfolio Website',
+                type: 'Frontend / Meta Project',
+                githubRepo: 'ParthMuley/Portfolio_WebSite',
+                description: `
+        This very portfolio — a hand-crafted, single-page experience with zero frameworks.
+        Built with pure HTML, Tailwind CSS, and vanilla JavaScript, it features a cinematic
+        panel-navigation system and an integrated AI Navigator powered by Google Gemini.
+        Highlights:
+        • Animated clip-path panel transitions with custom CSS keyframes.
+        • Live Gemini AI integration with sessionStorage key management.
+        • GitHub API context injection for auto-updating project reviews.
+        `
+            },
+            glucoseMonitoring: {
+                name: 'Glucose Monitoring System',
+                type: 'Embedded Systems / IoT',
+                description: `
+        An embedded hardware project that extends the Sweet Sense research into a real-time
+        wearable prototype for non-invasive blood glucose estimation.
+        Highlights:
+        • Near-infrared (NIR) sensor array interfaced with a microcontroller for photoplethysmography readings.
+        • Custom signal-processing pipeline filters motion artifacts and environmental noise.
+        • Onboard inference using a TinyML model compressed to run on ARM Cortex-M hardware.
+        • Companion mobile app (BLE) streams glucose estimates and logs trends over time.
         `
             }
         };
@@ -366,6 +460,63 @@
             }
         }
 
+        // --- API Key Modal logic ---
+        const apiKeyModal = document.getElementById('api-key-modal');
+        const apiKeyInput = document.getElementById('api-key-input');
+        const apiKeySubmit = document.getElementById('api-key-submit');
+        const apiKeyCancel = document.getElementById('api-key-cancel');
+        let _apiKeyResolve = null;
+
+        apiKeySubmit.addEventListener('click', () => {
+            const key = apiKeyInput.value.trim();
+            if (!key) return;
+            sessionStorage.setItem('gemini_api_key', key);
+            apiKeyModal.classList.remove('visible');
+            if (_apiKeyResolve) { _apiKeyResolve(key); _apiKeyResolve = null; }
+        });
+
+        apiKeyInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') apiKeySubmit.click();
+        });
+
+        apiKeyCancel.addEventListener('click', () => {
+            apiKeyModal.classList.remove('visible');
+            if (_apiKeyResolve) { _apiKeyResolve(null); _apiKeyResolve = null; }
+        });
+
+        function getGeminiApiKey() {
+            const stored = sessionStorage.getItem('gemini_api_key');
+            if (stored) return Promise.resolve(stored);
+            return new Promise(resolve => {
+                _apiKeyResolve = resolve;
+                apiKeyInput.value = '';
+                apiKeyModal.classList.add('visible');
+                apiKeyInput.focus();
+            });
+        }
+
+        async function fetchGitHubContext(repo) {
+            try {
+                const [repoRes, readmeRes] = await Promise.all([
+                    fetch(`https://api.github.com/repos/${repo}`),
+                    fetch(`https://api.github.com/repos/${repo}/readme`)
+                ]);
+                let context = '';
+                if (repoRes.ok) {
+                    const data = await repoRes.json();
+                    if (data.description) context += `GitHub description: ${data.description}\n`;
+                }
+                if (readmeRes.ok) {
+                    const readmeData = await readmeRes.json();
+                    const decoded = atob(readmeData.content.replace(/\n/g, ''));
+                    context += `README (first 1200 chars): ${decoded.slice(0, 1200)}`;
+                }
+                return context;
+            } catch (_) {
+                return '';
+            }
+        }
+
         function setupAiButtons(section) {
             section.querySelectorAll('.ai-btn').forEach(aiButton => {
                 aiButton.addEventListener('click', async () => {
@@ -374,17 +525,29 @@
                     const loader = section.querySelector('.loader');
                     const aiResponseArea = section.querySelector('.ai-response-area');
 
+                    const apiKey = await getGeminiApiKey();
+                    if (!apiKey) {
+                        aiResponseArea.innerText = 'Authentication cancelled. Provide a Gemini API key to use the Navigator.';
+                        return;
+                    }
+
                     const prompt = aiButton.dataset.prompt;
                     loader.classList.remove('hidden');
                     aiResponseArea.innerHTML = '';
                     section.querySelectorAll('.ai-btn').forEach(b => b.disabled = true);
-                    const apiKey = "";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                    let githubContext = '';
+                    if (selectedProject.githubRepo) {
+                        githubContext = await fetchGitHubContext(selectedProject.githubRepo);
+                    }
+
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
                     const fullPrompt = `You are a Navigator AI from a stylish video game. Analyze the following mission log:
                     - Mission: "${selectedProject.name}"
                     - Type: "${selectedProject.type}"
                     - Debrief: "${selectedProject.description}"
-                    - Tech Stack: "${selectedProject.tech}"
+                    - Tech Stack: "${selectedProject.tech || 'Not specified'}"
+                    ${githubContext ? `- Live GitHub Intel:\n${githubContext}` : ''}
                     Task: ${prompt}. Respond with confidence and a bit of flair, like a helpful AI companion.`;
                     const payload = { contents: [{ parts: [{ text: fullPrompt }] }] };
                     try {
@@ -393,13 +556,18 @@
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload)
                         });
+                        if (response.status === 400 || response.status === 401 || response.status === 403) {
+                            // Likely bad key — clear it so next click re-prompts
+                            sessionStorage.removeItem('gemini_api_key');
+                            throw new Error(`API Auth Error: ${response.status}`);
+                        }
                         if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
                         const result = await response.json();
                         const text = result.candidates?.[0]?.content?.parts?.[0]?.text || 'No intel available.';
                         typeWriter(aiResponseArea, text);
                     } catch (error) {
                         console.error("Gemini API call failed:", error);
-                        aiResponseArea.innerText = "Connection to Navigator lost. Check console.";
+                        aiResponseArea.innerText = "Connection to Navigator lost. Check console for details.";
                     } finally {
                         loader.classList.add('hidden');
                         section.querySelectorAll('.ai-btn').forEach(b => b.disabled = false);
