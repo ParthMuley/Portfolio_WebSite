@@ -482,8 +482,10 @@
                             if (errorText) {
                                 try {
                                     const errorPayload = JSON.parse(errorText);
-                                    if (errorPayload?.error) errorMessage = errorPayload.error;
-                                    else errorMessage = errorText;
+                                    errorMessage = errorPayload?.error
+                                        || errorPayload?.message
+                                        || errorPayload?.detail
+                                        || errorText;
                                 } catch {
                                     errorMessage = errorText;
                                 }
