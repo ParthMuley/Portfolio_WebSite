@@ -88,9 +88,21 @@ async function handleGeminiProxy(req, res) {
     res.writeHead(geminiResponse.status, { 'Content-Type': 'application/json' });
     res.end(responseText);
   } catch (error) {
-    const status = error.message === 'Payload too large' ? 413 : 400;
+    let status = 400;
+    let message = 'Invalid request payload';
+
+    if (error.message === 'Payload too large') {
+      status = 413;
+      message = 'Payload too large';
+    } else if (error instanceof SyntaxError) {
+      message = 'Invalid JSON format';
+    } else if (error.name === 'TypeError') {
+      status = 502;
+      message = 'Failed to reach Gemini service';
+    }
+
     res.writeHead(status, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Bad request' }));
+    res.end(JSON.stringify({ error: message }));
   }
 }
 
