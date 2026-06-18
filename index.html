@@ -5,6 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parth Muley - Portfolio</title>
+    <meta name="description" content="Parth Muley — Software Engineer specializing in AI and backend development. M.S. Computer Science (AI) at USC. Explore projects in multi-agent AI systems, RAG, and developer tooling.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Parth Muley - Portfolio">
+    <meta property="og:description" content="Software Engineer specializing in AI and backend development. Explore projects in multi-agent AI systems, RAG, and developer tooling.">
+    <meta property="og:url" content="https://portfolio-gemini-proxy.onrender.com/">
+    <meta property="og:image" content="https://portfolio-gemini-proxy.onrender.com/og-image.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Parth Muley - Portfolio">
+    <meta name="twitter:description" content="Software Engineer specializing in AI and backend development. Explore projects in multi-agent AI systems, RAG, and developer tooling.">
+    <meta name="twitter:image" content="https://portfolio-gemini-proxy.onrender.com/og-image.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,6 +47,21 @@
             background-color: #e02c2c;
             color: #000;
             transform: translateX(10px);
+        }
+
+        /* Below md, the nav becomes a horizontal pill bar instead of a
+           vertical angled menu, so the diagonal clip-path and horizontal
+           hover slide no longer make sense. */
+        @media (max-width: 767px) {
+            .nav-item {
+                clip-path: none;
+                border-radius: 9999px;
+            }
+
+            .nav-item:hover,
+            .nav-item.active {
+                transform: none;
+            }
         }
 
         .content-panel {
@@ -87,31 +112,44 @@
                 transform: rotate(360deg);
             }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .nav-item,
+            .content-panel {
+                transition: none;
+            }
+
+            .nav-item:hover,
+            .nav-item.active {
+                transform: none;
+            }
+        }
     </style>
 </head>
 
 <body class="main-bg">
 
-    <div class="flex h-screen">
+    <div class="flex flex-col md:flex-row h-screen">
         <!-- Navigation -->
-        <nav class="w-1/4 max-w-xs bg-black p-8 flex flex-col justify-center space-y-2">
+        <nav class="w-full md:w-1/4 md:max-w-xs bg-black p-3 md:p-8 flex flex-row md:flex-col flex-wrap justify-center md:justify-center items-center gap-2 md:gap-0 md:space-y-2 flex-shrink-0">
             <button data-target="panel-about"
-                class="nav-item active font-anton text-2xl text-right p-3 pr-10 bg-gray-900">ABOUT</button>
+                class="nav-item active font-anton text-base md:text-2xl text-center md:text-right p-2 md:p-3 px-4 md:pr-10 bg-gray-900">ABOUT</button>
             <button data-target="panel-experience"
-                class="nav-item font-anton text-2xl text-right p-3 pr-10 bg-gray-900">JOURNEY</button>
+                class="nav-item font-anton text-base md:text-2xl text-center md:text-right p-2 md:p-3 px-4 md:pr-10 bg-gray-900">JOURNEY</button>
             <button data-target="panel-projects"
-                class="nav-item font-anton text-2xl text-right p-3 pr-10 bg-gray-900">PROJECTS</button>
+                class="nav-item font-anton text-base md:text-2xl text-center md:text-right p-2 md:p-3 px-4 md:pr-10 bg-gray-900">PROJECTS</button>
             <button data-target="panel-skills"
-                class="nav-item font-anton text-2xl text-right p-3 pr-10 bg-gray-900">SKILLS</button>
+                class="nav-item font-anton text-base md:text-2xl text-center md:text-right p-2 md:p-3 px-4 md:pr-10 bg-gray-900">SKILLS</button>
             <button data-target="panel-contact"
-                class="nav-item font-anton text-2xl text-right p-3 pr-10 bg-gray-900">CONTACT</button>
+                class="nav-item font-anton text-base md:text-2xl text-center md:text-right p-2 md:p-3 px-4 md:pr-10 bg-gray-900">CONTACT</button>
         </nav>
 
         <!-- Content Area -->
-        <main class="flex-grow relative overflow-hidden">
+        <main class="flex-grow min-h-0 relative overflow-hidden">
             <!-- About Panel -->
             <div id="panel-about" class="content-panel active p-8 md:p-12 overflow-y-auto">
-                <h2 class="font-anton text-6xl text-red-500">PARTH MULEY</h2>
+                <h2 class="font-anton text-4xl md:text-6xl text-red-500">PARTH MULEY</h2>
                 <h3 class="text-xl text-gray-400">Software Engineer | AI & Backend Developer</h3>
                 <p class="mt-8 max-w-prose">
                     I’m <strong>Parth Muley</strong> — a digital architect who builds intelligent systems that connect
@@ -142,7 +180,7 @@
 
             <!-- Journey Panel -->
             <div id="panel-experience" class="content-panel p-8 md:p-12 overflow-y-auto">
-                <h2 class="font-anton text-6xl text-red-500">JOURNEY</h2>
+                <h2 class="font-anton text-4xl md:text-6xl text-red-500">JOURNEY</h2>
                 <div class="mt-8">
                     <h3 class="font-anton text-3xl text-gray-200">Experience</h3>
                     <div class="mt-4 space-y-6">
@@ -189,7 +227,7 @@
 
             <!-- Projects Panel -->
             <div id="panel-projects" class="content-panel p-8 md:p-12 overflow-y-auto">
-                <h2 class="font-anton text-6xl text-red-500">PROJECTS</h2>
+                <h2 class="font-anton text-4xl md:text-6xl text-red-500">PROJECTS</h2>
                 <div id="projects-list" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Projects will be populated by JS -->
                 </div>
@@ -205,8 +243,8 @@
                                 data-prompt="Briefly explain the role of each technology used in this project.">LIST
                                 TECH STACK</button>
                             <button class="ai-btn flex-1 text-red-400 text-sm py-2 px-3"
-                                data-prompt="Suggest potential improvements, next features, or next steps that would make this project even more impressive.">SUGGEST
-                                IMPROVEMENTS</button>
+                                data-prompt="Explain what this project does and why it matters in simple, layman's terms, avoiding jargon.">EXPLAIN
+                                SIMPLY</button>
                         </div>
                         <p class="mt-3 text-xs text-gray-500">AI calls are securely proxied through the backend with server-side rate limiting.</p>
                         <div class="ai-response-area mt-4 p-3 bg-black/30 rounded min-h-[60px] text-sm font-mono"></div>
@@ -217,7 +255,7 @@
 
             <!-- Skills Panel -->
             <div id="panel-skills" class="content-panel p-8 md:p-12 overflow-y-auto">
-                <h2 class="font-anton text-6xl text-red-500">SKILLS</h2>
+                <h2 class="font-anton text-4xl md:text-6xl text-red-500">SKILLS</h2>
                 <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
                     <div>
                         <h3 class="text-xl text-gray-300 font-bold">Languages</h3>
@@ -248,7 +286,7 @@
 
             <!-- Contact Panel -->
             <div id="panel-contact" class="content-panel p-8 md:p-12 overflow-y-auto">
-                <h2 class="font-anton text-6xl text-red-500">CONTACT</h2>
+                <h2 class="font-anton text-4xl md:text-6xl text-red-500">CONTACT</h2>
                 <div class="mt-8 space-y-4 text-lg">
                     <p>EMAIL: <a href="mailto:parthusc.2025@gmail.com"
                             class="text-red-400 hover:underline">parthusc.2025@gmail.com</a></p>
@@ -270,56 +308,47 @@
         // --- EDIT YOUR DATA HERE ---
         // --- EDIT YOUR DATA HERE ---
         const projectsData = {
-            monarch: {
-                name: 'Project Monarch',
-                type: 'Security Automation',
-                githubRepo: 'ParthMuley/Project_Monarch',
+            complexityOracle: {
+                name: 'Complexity Oracle',
+                type: 'Developer Tooling',
+                githubRepo: 'ParthMuley/complexity-oracle',
                 description: `
-        Project Monarch is an automation framework that streamlines GitLab Security Vulnerability Management.
-        It automatically fetches, merges, and processes vulnerability data — classifying upgrade types, filtering
-        deprecated or infeasible CVEs, and generating stakeholder-friendly reports. 
+        Complexity Oracle diagnoses why Python code will slow down at scale — not just that it will.
+        It runs static AST-based complexity analysis and empirical runtime profiling on the same code,
+        then uses an AI agent to reconcile disagreements between the two and explain the gap in plain English.
         Highlights:
-        • Automated end-to-end pipeline for vulnerability triage.
-        • Intelligent exclusion logic for deprecated and out-of-scope files.
-        • CSV processor that classifies upgrade severities (major/minor/patch).
+        • Cross-validates static (AST) complexity predictions against actual measured runtime behavior.
+        • AI reconciliation layer pinpoints the offending line and explains why predictions and reality diverge.
+        • Python + Docker, built for reproducible benchmarking and CI integration.
         `
             },
-            eventSharing: {
-                name: 'Local Event Sharing API',
-                type: 'Backend API',
+            alibi: {
+                name: 'Alibi',
+                type: 'AI Safety Agent',
+                githubRepo: 'ParthMuley/alibi',
                 description: `
-        A RESTful API designed to connect communities through local event sharing. 
-        It enables users to add, search, update, and delete events while keeping scalability
-        and clarity at the core. 
+        Alibi is a conversational AI safety agent that lives inside iMessage and WhatsApp. Before a
+        potentially unsafe situation — a late-night walk, a first date, a solo trip — users text Alibi,
+        which sets a check-in timer, watches for distress signals, and automatically alerts emergency
+        contacts if something seems wrong. Built solo for HackWithSeattle 2026.
         Highlights:
-        • Built modular REST endpoints with Node.js and Express.
-        • Integrated location-based search and filtering.
-        • MongoDB backend with Postman-tested endpoints.
+        • Natural-language check-in flow — no app to install, no commands to memorize.
+        • Timer-based escalation that auto-alerts emergency contacts on a missed check-in.
+        • Message delivery via Photon Spectrum across iMessage and WhatsApp; Python/TypeScript with Redis-backed memory.
         `
             },
-            aiAgents: {
-                name: 'AI Agents',
-                type: 'AI Systems',
-                githubRepo: 'ParthMuley/Ai_agents',
+            preferenceFalsification: {
+                name: 'Preference Falsification',
+                type: 'Multi-Agent LLM Research',
+                githubRepo: 'ParthMuley/Preference-Falsification',
                 description: `
-        A suite of experimental AI-driven agents that simulate reasoning, automate tasks,
-        and serve as domain-specific assistants. 
+        A multi-agent LLM simulation studying preference falsification — the gap between what people
+        privately believe and what they say publicly — in a disease-outbreak scenario where agents
+        privately suspect data is being suppressed but face social pressure to stay silent.
         Highlights:
-        • Built with LangChain and OpenAI API for contextual task reasoning.
-        • Implemented memory persistence and prompt templates.
-        • Explored multi-agent collaboration patterns for intelligent task automation.
-        `
-            },
-            sweetSense: {
-                name: 'Sweet Sense',
-                type: 'ML Research Project',
-                description: `
-        A research initiative to develop a non-invasive, ML-powered glucose monitoring system.
-        The model maps sensor features to blood sugar levels, aiming for a prick-free alternative.
-        Highlights:
-        • Built and trained ML models using scikit-learn and Raspberry Pi sensor data.
-        • Conducted real-time signal analysis for glucose estimation.
-        • Guided by Prof. Parul Jadhav, USC.
+        • 7 experimental conditions varying network structure (complete vs. clustered), social pressure, and trigger placement.
+        • Agents, simulation engine, and network graphs built in Python with Gemini via langchain-google-genai.
+        • Includes an analysis/figure-generation pipeline and an in-progress research paper.
         `
             },
             pulse: {
@@ -328,12 +357,40 @@
                 githubRepo: 'ParthMuley/Pulse',
                 description: `
         Pulse is an AI-driven dynamic music engine for live streaming. It analyzes Twitch chat
-        and streamer commentary to compose custom instrumental soundtracks in real-time —
-        matching the mood and energy of the stream moment-by-moment.
+        sentiment, stream context, and streamer commentary in real time, then generates mood-matched
+        instrumental soundtracks that shift moment-by-moment with the action.
         Highlights:
-        • Real-time sentiment analysis of Twitch chat using NLP.
-        • Generative music composition pipeline that adapts to streamer context.
-        • Built with TypeScript; targets zero-latency audio response.
+        • Gemini 3 Flash reads chat sentiment, identifies game/context via Google Search, and analyzes streamer commentary.
+        • Lyria 3 generates instrumental music tracks tuned to the detected mood and intensity.
+        • Built with TypeScript on an event-driven architecture targeting low-latency audio response.
+        `
+            },
+            multiModalRag: {
+                name: 'Multimodal RAG',
+                type: 'AI Systems / RAG',
+                githubRepo: 'ParthMuley/Multi_Modal_RAG',
+                description: `
+        A Retrieval-Augmented Generation system that goes beyond text-only RAG by ingesting and
+        retrieving across both text and images extracted from PDFs, then synthesizing answers
+        grounded in both modalities.
+        Highlights:
+        • Unified embedding space for multimodal similarity search against a Qdrant vector database.
+        • Gemini 1.5 (Pro/Flash) synthesizes answers from retrieved text and visual context together.
+        • Streamlit UI backed by a Python ingestion pipeline that extracts text and images from PDFs.
+        `
+            },
+            monarch: {
+                name: 'Project Monarch',
+                type: 'Multi-Agent AI Framework',
+                githubRepo: 'ParthMuley/Project_Monarch',
+                description: `
+        Project Monarch is an autonomous, multi-guild AI agent organization inspired by Solo Leveling.
+        A central "Monarch" agent manages an army of specialized agents — organized into guilds like
+        Writers, Coders, and Artists — to complete complex, multi-domain tasks.
+        Highlights:
+        • Configuration-driven workflow engine drives multi-step, multi-agent projects.
+        • Agents gain XP and rank up over time; persistent memory via a vector database lets the organization learn from past jobs.
+        • High-rank agents can call external tools (web search, code interpreter); packaged as a Python CLI.
         `
             },
             portfolioWebsite: {
@@ -346,21 +403,8 @@
         panel-navigation system and an integrated AI Navigator powered by Google Gemini.
         Highlights:
         • Animated clip-path panel transitions with custom CSS keyframes.
-        • Live Gemini AI integration via a secure backend proxy and server-side rate limiting.
-        • GitHub API context injection for auto-updating project reviews.
-        `
-            },
-            glucoseMonitoring: {
-                name: 'Glucose Monitoring System',
-                type: 'Embedded Systems / IoT',
-                description: `
-        An embedded hardware project that extends the Sweet Sense research into a real-time
-        wearable prototype for non-invasive blood glucose estimation.
-        Highlights:
-        • Near-infrared (NIR) sensor array interfaced with a microcontroller for photoplethysmography readings.
-        • Custom signal-processing pipeline filters motion artifacts and environmental noise.
-        • Onboard inference using a TinyML model compressed to run on ARM Cortex-M hardware.
-        • Companion mobile app (BLE) streams glucose estimates and logs trends over time.
+        • Live Gemini AI integration via a secure backend proxy, with server-side rate limiting and response caching.
+        • GitHub API context injection (description, languages, README) for grounded, hallucination-resistant project Q&A.
         `
             }
         };
@@ -410,6 +454,10 @@
 
         function typeWriter(element, text, i = 0) {
             if (!element) return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                element.innerText = text;
+                return;
+            }
             if (i === 0) element.innerHTML = '';
             if (i < text.length) {
                 element.innerHTML += text.charAt(i);
@@ -419,21 +467,11 @@
 
         async function fetchGitHubContext(repo) {
             try {
-                const [repoRes, readmeRes] = await Promise.all([
-                    fetch(`https://api.github.com/repos/${repo}`),
-                    fetch(`https://api.github.com/repos/${repo}/readme`)
-                ]);
-                let context = '';
-                if (repoRes.ok) {
-                    const data = await repoRes.json();
-                    if (data.description) context += `GitHub description: ${data.description}\n`;
-                }
-                if (readmeRes.ok) {
-                    const readmeData = await readmeRes.json();
-                    const decoded = atob(readmeData.content.trim());
-                    context += `README (first 1200 chars): ${decoded.slice(0, 1200)}`;
-                }
-                return context;
+                const url = `${window.location.origin}/api/github-context?repo=${encodeURIComponent(repo)}`;
+                const res = await fetch(url);
+                if (!res.ok) return '';
+                const data = await res.json();
+                return data.context || '';
             } catch (err) {
                 console.warn('Could not fetch GitHub context:', err);
                 return '';
@@ -458,14 +496,16 @@
                         githubContext = await fetchGitHubContext(selectedProject.githubRepo);
                     }
 
-                    const fullPrompt = `You are a Navigator AI from a stylish video game. Analyze the following mission log:
+                    const fullPrompt = `You are a Navigator AI from a stylish video game. Stick strictly to the facts in the mission log below. If a detail isn't included here, say plainly that it's not part of your available intel instead of guessing.
+
+                    MISSION LOG:
                     - Mission: "${selectedProject.name}"
                     - Type: "${selectedProject.type}"
                     - Debrief: "${selectedProject.description}"
-                    - Tech Stack: "${selectedProject.tech || 'Not specified'}"
-                    ${githubContext ? `- Live GitHub Intel:\n${githubContext}` : ''}
-                    Task: ${prompt}. Respond with confidence and a bit of flair, like a helpful AI companion.`;
-                    const payload = { contents: [{ parts: [{ text: fullPrompt }] }] };
+                    - Live GitHub Intel: ${githubContext ? `\n${githubContext}` : 'not available for this mission.'}
+
+                    Task: ${prompt}. Respond with confidence and a bit of flair, like a helpful AI companion, but never invent specifics that aren't in the mission log above.`;
+                    const payload = { contents: [{ parts: [{ text: fullPrompt }] }], generationConfig: { temperature: 0.3 } };
                     try {
                         const response = await fetch(GEMINI_API_URL, {
                             method: 'POST',
