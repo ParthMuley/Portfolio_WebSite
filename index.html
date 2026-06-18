@@ -9,12 +9,12 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="Parth Muley - Portfolio">
     <meta property="og:description" content="Software Engineer specializing in AI and backend development. Explore projects in multi-agent AI systems, RAG, and developer tooling.">
-    <meta property="og:url" content="https://portfolio-gemini-proxy.onrender.com/">
-    <meta property="og:image" content="https://portfolio-gemini-proxy.onrender.com/og-image.svg">
+    <meta property="og:url" content="https://parthmuley.github.io/Portfolio_WebSite/">
+    <meta property="og:image" content="https://parthmuley.github.io/Portfolio_WebSite/og-image.svg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Parth Muley - Portfolio">
     <meta name="twitter:description" content="Software Engineer specializing in AI and backend development. Explore projects in multi-agent AI systems, RAG, and developer tooling.">
-    <meta name="twitter:image" content="https://portfolio-gemini-proxy.onrender.com/og-image.svg">
+    <meta name="twitter:image" content="https://parthmuley.github.io/Portfolio_WebSite/og-image.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -301,9 +301,14 @@
 
     <script>
         // --- CONFIGURATION ---
-        // Uses same-origin by default. Optionally override via ?apiUrl=https://your-host/api/gemini
+        // The public site is hosted on GitHub Pages (static-only, no backend),
+        // so AI calls are routed to the Render-hosted server instead of same-origin.
+        // Locally (node server.js) same-origin is used. Override via ?apiUrl=...
         const apiUrlFromQuery = new URLSearchParams(window.location.search).get('apiUrl');
-        const GEMINI_API_URL = apiUrlFromQuery || `${window.location.origin}/api/gemini`;
+        const RENDER_API_ORIGIN = 'https://portfolio-website-fpy5.onrender.com';
+        const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+        const API_ORIGIN = isLocalHost ? window.location.origin : RENDER_API_ORIGIN;
+        const GEMINI_API_URL = apiUrlFromQuery || `${API_ORIGIN}/api/gemini`;
 
         // --- EDIT YOUR DATA HERE ---
         // --- EDIT YOUR DATA HERE ---
@@ -467,7 +472,7 @@
 
         async function fetchGitHubContext(repo) {
             try {
-                const url = `${window.location.origin}/api/github-context?repo=${encodeURIComponent(repo)}`;
+                const url = `${API_ORIGIN}/api/github-context?repo=${encodeURIComponent(repo)}`;
                 const res = await fetch(url);
                 if (!res.ok) return '';
                 const data = await res.json();

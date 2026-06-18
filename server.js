@@ -18,6 +18,21 @@ const ALLOWED_REPO_PATTERN = /^ParthMuley\/[A-Za-z0-9_.-]+$/;
 const GITHUB_CONTEXT_CACHE_TTL_MS = 30 * 60 * 1000;
 const githubContextCache = new Map();
 
+// The public site is hosted on GitHub Pages (static-only) and calls this
+// Render-hosted backend cross-origin, so it needs to be explicitly allowed.
+const ALLOWED_ORIGINS = new Set([
+  'https://parthmuley.github.io',
+  'https://portfolio-website-fpy5.onrender.com',
+]);
+
+function applyCors(req, res) {
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.has(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+  }
+}
+
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 20;
 const rateLimitStore = new Map();
@@ -233,6 +248,16 @@ async function handleGithubContextProxy(req, res) {
 }
 
 const server = http.createServer(async (req, res) => {
+  applyCors(req, res);
+
+  if (req.method === 'OPTIONS' && (req.url === '/api/gemini' || req.url.startsWith('/api/github-context'))) {
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
   if (req.method === 'POST' && req.url === '/api/gemini') {
     await handleGeminiProxy(req, res);
     return;
